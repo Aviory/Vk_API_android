@@ -1,7 +1,9 @@
 package com.example.user.vkadvert;
 
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -25,12 +27,15 @@ import com.vk.sdk.util.VKUtil;
 import java.util.Arrays;
 
 public class MainActivity extends BaseActivity {
-    private String[] scope = new String[]{VKScopes.FRIENDS};
+
+    private String[] scope = new String[]{VKScopes.FRIENDS, VKScopes.ADS, VKScopes.OFFLINE};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         VKSdk.login(this, scope);
+
 
 //        addFragment(getAct(), MainFragment.class, R.id.coordinator_layout,null, false, false, true );
 //        addFragment(getAct(), AdvertFragment.class, R.id.coordinator_layout,null, false, false, true );

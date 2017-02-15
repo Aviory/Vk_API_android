@@ -1,28 +1,24 @@
 package com.example.user.vkadvert.fragments;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListAdapter;
 import android.widget.ListView;
-import android.widget.RelativeLayout;
 import android.widget.SimpleAdapter;
+import android.widget.TextView;
 
 import com.example.user.vkadvert.MainActivity;
 import com.example.user.vkadvert.R;
-import com.example.user.vkadvert.common.BaseActivity;
+import com.example.user.vkadvert.adapters.MyAdapter;
+import com.example.user.vkadvert.adapters.adsAdapter;
 import com.example.user.vkadvert.common.BaseFragment;
-import com.example.user.vkadvert.model.AdvertItem;
 import com.example.user.vkadvert.utils.LogUtil;
 import com.mikepenz.materialdrawer.Drawer;
 import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
-import com.mikepenz.materialdrawer.model.interfaces.Badgeable;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.Nameable;
 import com.vk.sdk.api.VKApi;
@@ -31,6 +27,10 @@ import com.vk.sdk.api.VKParameters;
 import com.vk.sdk.api.VKRequest;
 import com.vk.sdk.api.VKResponse;
 import com.vk.sdk.api.model.VKList;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -45,47 +45,47 @@ public class AdvertFragment extends BaseFragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        initListView();
+//        initListView();
+        initAds();
         initToolbar();
     }
 
+    private void initAds() {
+        ListView listView = (ListView) getAct().findViewById(R.id.advertList);
+        VKRequest request = new VKRequest("ads.getAccounts");
+
+        request.executeWithListener(new VKRequest.VKRequestListener() {
+            @Override
+            public void onComplete(VKResponse response) {
+                super.onComplete(response);
+
+                JSONObject list = response.json;
+                ArrayList<JSONObject> lists = new ArrayList<JSONObject>();
+                lists.add(list);
+                ListAdapter adapter = new adsAdapter(getContext(),R.layout.adver_item,lists);
+
+                listView.setAdapter(adapter);
+            }
+        });
+    }
     private void initListView() {
         ListView listView = (ListView) getAct().findViewById(R.id.advertList);
-        VKRequest request = new VKApi.friends().get(VKParameters.from(VKApiConst.FIELDS,"first_name,last_name"));
+
+        VKRequest request = VKApi.friends().get(VKParameters.from(VKApiConst.FIELDS,"first_name,last_name"));
         request.executeWithListener(new VKRequest.VKRequestListener() {
             @Override
             public void onComplete(VKResponse response) {
                 super.onComplete(response);
 
                 VKList list = (VKList) response.parsedModel;
+
+                ListAdapter adapter = new MyAdapter(getContext(),R.layout.adver_item,list);
+
+                // присваиваем адаптер списку
+                listView.setAdapter(adapter);
+
             }
         });
-
-        ArrayList<HashMap<String, String>> myArrList = new ArrayList<HashMap<String, String>>();
-        HashMap<String, String> map;
-
-        map = new HashMap<String, String>();
-        map.put("Name", "id: 1234");
-        map.put("Tel", "Balance: 545р");
-        myArrList.add(map);
-
-        map = new HashMap<String, String>();
-        map.put("Name", "id: 1234");
-        map.put("Tel", "Balance: 845р");
-        myArrList.add(map);
-
-        map = new HashMap<String, String>();
-        map.put("Name", "id: 1234");
-        map.put("Tel", "Balance: 468р");
-        myArrList.add(map);
-
-
-        SimpleAdapter adapter = new SimpleAdapter(getContext(), myArrList, R.layout.adver_item,
-                new String[] {"Name", "Tel"},
-                new int[] {R.id.txtAcc_Id, R.id.txtAcc_balance});
-
-        // присваиваем адаптер списку
-        listView.setAdapter(adapter);
     }
 
     private void initToolbar(){

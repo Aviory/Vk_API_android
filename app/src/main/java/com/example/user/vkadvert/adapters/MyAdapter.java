@@ -41,7 +41,7 @@ public class MyAdapter extends ArrayAdapter {
             convertView = LayoutInflater.from(mContext).inflate(res, parent, false);
         }
         TextView tv = (TextView) convertView.findViewById(R.id.txtAcc_Id);
-        tv.setText(qq.getId());
+        tv.setText(qq.facebook_name);
 
         TextView tvv = (TextView) convertView.findViewById(R.id.txtAcc_balance);
         tvv.setText(qq.last_name);
