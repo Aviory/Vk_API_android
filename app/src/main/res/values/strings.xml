@@ -1,0 +1,17 @@
+<resources>
+    <string name="app_name">VkAdvert</string>
+
+    <integer name="com_vk_sdk_AppId">5862821</integer>
+
+    <string name="btn_login">Войти</string>
+    <string name="txt_myAcc">Мой аккаунт</string>
+    <string name="txt_acc_id">id: </string>
+    <string name="txt_acc_balance">Баланс: </string>
+    <string name="txt_drawer_rooms">Кабинеты </string>
+    <string name="txt_drawer_condition">Условия</string>
+    <string name="txt_drawer_aboutApp">О приложении</string>
+    <string name="txt_drawer_contacts">Контакты</string>
+    <string name="txt_drawer_exit">Выход</string>
+    <string name="advert_room">Рекламные кабинеты</string>
+
+</resources>
